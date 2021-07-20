@@ -1,21 +1,26 @@
 package com.ruslanshakirov.crm.service;
 
-import com.ruslanshakirov.crm.entity.BaseEntity;
+import com.ruslanshakirov.crm.entity.AbstractBaseEntity;
 import com.ruslanshakirov.crm.exception.MyBadRequestException;
 import com.ruslanshakirov.crm.exception.MyNotFoundException;
-import com.ruslanshakirov.crm.repository.BaseRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Service;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
 @RequiredArgsConstructor
-public abstract class BaseServiceImpl<T extends BaseEntity, R extends BaseRepository<T>> implements BaseService<T> {
-    private final R repository;
+public abstract class BaseServiceImpl<T extends AbstractBaseEntity, R extends org.springframework.data.jpa.repository.JpaRepository<T, Long>> implements BaseService<T> {
+    protected final R repository;
 
     @Override
     public List<T> getAll() {
         return repository.findAll();
+    }
+
+    @Override
+    public Page<T> getAll(Pageable pageable) {
+        return repository.findAll(pageable);
     }
 
     @Override
